@@ -1759,7 +1759,9 @@ public abstract class DomNode implements Cloneable, Serializable, Node {
             return new StaticDomNodeList(elements);
         }
         catch (final IOException e) {
-            throw new CSSException("Error parsing CSS selectors from '" + selectors + "': " + e.getMessage(), e);
+            CSSException cssException = new CSSException("Error parsing CSS selectors from '" + selectors + "': " + e.getMessage());
+            cssException.initCause(e);
+            throw cssException;
         }
     }
 
@@ -1782,7 +1784,9 @@ public abstract class DomNode implements Cloneable, Serializable, Node {
             final SelectorList selectorList = parser.parseSelectors(selectors);
             // in case of error parseSelectors returns null
             if (errorHandler.error() != null) {
-                throw new CSSException("Invalid selectors: '" + selectors + "'", errorHandler.error());
+                CSSException cssException = new CSSException("Invalid selectors: '" + selectors + "'");
+                cssException.initCause(errorHandler.error());
+                throw cssException;
             }
 
             if (selectorList != null) {
@@ -1932,7 +1936,9 @@ public abstract class DomNode implements Cloneable, Serializable, Node {
             return null;
         }
         catch (final IOException e) {
-            throw new CSSException("Error parsing CSS selectors from '" + selectorString + "': " + e.getMessage(), e);
+            CSSException cssException = new CSSException("Error parsing CSS selectors from '" + selectorString + "': " + e.getMessage());
+            cssException.initCause(e);
+            throw cssException;
         }
     }
 }

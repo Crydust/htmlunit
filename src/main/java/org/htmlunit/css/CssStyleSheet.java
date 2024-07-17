@@ -1092,7 +1092,7 @@ public class CssStyleSheet implements Serializable {
                 final DomNode domNode) throws CSSException {
         for (final Selector selector : selectorList) {
             if (!isValidSelector(selector, documentMode, domNode)) {
-                throw new CSSException("Invalid selector: " + selector, null);
+                throw new CSSException("Invalid selector: " + selector);
             }
         }
     }
