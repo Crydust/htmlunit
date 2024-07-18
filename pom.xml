@@ -1230,6 +1230,13 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.sun.xml.parsers</groupId>
+            <artifactId>jaxp-ri</artifactId>
+            <version>1.4.5</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>org.htmlunit</groupId>
             <artifactId>htmlunit-cssparser</artifactId>
             <version>${htmlunitcssparser.version}</version>
