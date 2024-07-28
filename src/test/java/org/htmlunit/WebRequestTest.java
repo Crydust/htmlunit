@@ -22,6 +22,8 @@ import java.io.File;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.http.auth.BasicUserPrincipal;
@@ -394,6 +396,42 @@ public class WebRequestTest {
         assertEquals("u", request.getParameters().get(0).getValue());
     }
 
+    /**
+     * @throws Exception if the test fails
+     */
+    @Test
+    public void getParametersFromQueryAndUrlEncodedBodyPost() throws Exception {
+        final URL url = new URL("http://localhost/test?a=b");
+        final WebRequest request = new WebRequest(url);
+        request.setHttpMethod(HttpMethod.POST);
+        request.setEncodingType(FormEncodingType.URL_ENCODED);
+        request.setRequestBody("c=d");
+
+        List<NameValuePair> parameters = request.getParameters();
+
+        assertEquals(2, parameters.size());
+        assertEquals("a", parameters.get(0).getName());
+        assertEquals("b", parameters.get(0).getValue());
+        assertEquals("c", parameters.get(1).getName());
+        assertEquals("d", parameters.get(1).getValue());
+    }
+
+    @Test
+    public void getParametersFromQueryAndUrlEncodedBodyPostWhenEncodingTypeIsMultipart() throws Exception {
+        final URL url = new URL("http://localhost/test?a=b");
+        final WebRequest request = new WebRequest(url);
+        request.setHttpMethod(HttpMethod.POST);
+        request.setEncodingType(FormEncodingType.MULTIPART);
+        request.setRequestParameters(Collections.singletonList(new NameValuePair("c", "d")));
+
+        List<NameValuePair> parameters = request.getParameters();
+
+        assertEquals(2, parameters.size());
+        assertEquals("a", parameters.get(0).getName());
+        assertEquals("b", parameters.get(0).getValue());
+        assertEquals("c", parameters.get(1).getName());
+        assertEquals("d", parameters.get(1).getValue());
+    }
     /**
      * @throws Exception if the test fails
      */
