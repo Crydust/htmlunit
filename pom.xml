@@ -310,7 +310,7 @@
                             <!-- see https://stackoverflow.com/questions/53010200/maven-surefire-could-not-find-forkedbooter-class -->
                             <useSystemClassLoader>false</useSystemClassLoader>
                             <includes>
-                                <include>org/htmlunit/html/HtmlFormTest.java</include>
+                                <include>org/htmlunit/WebRequestTest.java</include>
                             </includes>
                             <argLine>-Xms128m -Xmx512m -Dsun.reflect.noInflation=true</argLine>
                             <systemPropertyVariables>
