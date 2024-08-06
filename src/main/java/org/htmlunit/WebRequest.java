@@ -366,15 +366,42 @@ public class WebRequest implements Serializable {
         final List<NameValuePair> allParameters = new ArrayList<>(
                 HttpUtils.parseUrlQuery(getUrl().getQuery(), getCharset()));
 
-        if (HttpMethod.GET != getHttpMethod() && HttpMethod.OPTIONS != getHttpMethod()) {
-            if (FormEncodingType.URL_ENCODED == getEncodingType()) {
+        if (HttpMethod.TRACE == getHttpMethod()) {
+            // TRACE doesn't allow a body
+        } else {
+            String accept = getAdditionalHeader("Accept");
+            if (accept != null
+                && accept.startsWith("application/json")
+                && FormEncodingType.MULTIPART == getEncodingType()
+                && (
+                      /*HttpMethod.POST == getHttpMethod()
+                      || */ HttpMethod.PUT == getHttpMethod()
+                      || HttpMethod.PATCH == getHttpMethod()
+                      || HttpMethod.DELETE == getHttpMethod()
+                      || HttpMethod.OPTIONS == getHttpMethod()
+                )) {
+                // I don't know why spring adds these parameters at the start of the list.
+                // But to make it happy we do the same.
+                allParameters.addAll(0, getRequestParameters());
+            } else if (FormEncodingType.URL_ENCODED == getEncodingType()
+                       && (HttpMethod.POST == getHttpMethod()
+                           || HttpMethod.PUT == getHttpMethod()
+                           || HttpMethod.PATCH == getHttpMethod()
+                           || HttpMethod.DELETE == getHttpMethod()
+                           /*|| HttpMethod.OPTIONS == getHttpMethod()*/
+                       )) {
                 if (getRequestBody() == null) {
                     allParameters.addAll(getRequestParameters());
                 } else {
                     allParameters.addAll(HttpUtils.parseUrlQuery(getRequestBody(), getCharset()));
                 }
-            }
-            if (FormEncodingType.MULTIPART == getEncodingType()) {
+            } else if (FormEncodingType.MULTIPART == getEncodingType() &&
+                       (HttpMethod.POST == getHttpMethod()
+                        || HttpMethod.PUT == getHttpMethod()
+                        || HttpMethod.PATCH == getHttpMethod()
+                        || HttpMethod.DELETE == getHttpMethod()
+                        /*|| HttpMethod.OPTIONS == getHttpMethod()*/
+                       )) {
                 // the servlet api ignores these parameters but to make spring happy we include them
                 allParameters.addAll(getRequestParameters());
             }
