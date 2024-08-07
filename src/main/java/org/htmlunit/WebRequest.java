@@ -377,11 +377,13 @@ public class WebRequest implements Serializable {
                 && HttpMethod.POST != httpMethod) {
                 // these parameters should come after the query parameters but to mimic spring we add them at the start
                 allParameters.addAll(0, getRequestParameters());
-            } else if (FormEncodingType.URL_ENCODED == encodingType && HttpMethod.OPTIONS != httpMethod) {
+            }
+            else if (FormEncodingType.URL_ENCODED == encodingType && HttpMethod.OPTIONS != httpMethod) {
                 allParameters.addAll(getRequestBody() == null
                         ? getRequestParameters()
                         : HttpUtils.parseUrlQuery(getRequestBody(), getCharset()));
-            } else if (FormEncodingType.MULTIPART == encodingType && HttpMethod.OPTIONS != httpMethod) {
+            }
+            else if (FormEncodingType.MULTIPART == encodingType && HttpMethod.OPTIONS != httpMethod) {
                 // the servlet api ignores these parameters but to make spring happy we include them
                 allParameters.addAll(getRequestParameters());
             }
