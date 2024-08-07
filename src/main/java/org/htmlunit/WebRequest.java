@@ -375,9 +375,7 @@ public class WebRequest implements Serializable {
             if (("application/json".equalsIgnoreCase(accept) || "application/xml".equalsIgnoreCase(accept))
                 && FormEncodingType.MULTIPART == encodingType
                 && HttpMethod.POST != httpMethod) {
-                // I don't know why spring adds these parameters at the start of the list.
-                // I assume this is a bug.
-                // But to make it happy we do the same.
+                // these parameters should come after the query parameters but to mimic spring we add them at the start
                 allParameters.addAll(0, getRequestParameters());
             } else if (FormEncodingType.URL_ENCODED == encodingType && HttpMethod.OPTIONS != httpMethod) {
                 allParameters.addAll(getRequestBody() == null
