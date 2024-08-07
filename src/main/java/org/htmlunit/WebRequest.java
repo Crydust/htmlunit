@@ -368,10 +368,10 @@ public class WebRequest implements Serializable {
                 HttpUtils.parseUrlQuery(getUrl().getQuery(), getCharset()));
 
         final HttpMethod httpMethod = getHttpMethod();
-        final FormEncodingType encodingType = getEncodingType();
-        final String accept = getAdditionalHeader("Accept");
         // GET, HEAD and TRACE don't allow a request body
         if (HttpMethod.GET != httpMethod && HttpMethod.HEAD != httpMethod && HttpMethod.TRACE != httpMethod) {
+            final FormEncodingType encodingType = getEncodingType();
+            final String accept = getAdditionalHeader("Accept");
             if (("application/json".equalsIgnoreCase(accept) || "application/xml".equalsIgnoreCase(accept))
                 && FormEncodingType.MULTIPART == encodingType
                 && HttpMethod.POST != httpMethod) {
