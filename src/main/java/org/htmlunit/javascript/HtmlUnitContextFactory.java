@@ -346,7 +346,8 @@ public class HtmlUnitContextFactory extends ContextFactory {
                 return true;
             case Context.FEATURE_HTMLUNIT_MEMBERBOX_NAME:
                 return browserVersion_.hasFeature(JS_PROPERTY_DESCRIPTOR_NAME);
-            case Context.FEATURE_HTMLUNIT_MEMBERBOX_NEWLINE:
+//            case Context.FEATURE_HTMLUNIT_MEMBERBOX_NEWLINE:
+            case 106:
                 return false;
             default:
                 return super.hasFeature(cx, featureIndex);
