@@ -388,6 +388,7 @@ public class WebRequest implements Serializable {
                 allParameters.addAll(0, getRequestParameters());
             }
             else if (FormEncodingType.URL_ENCODED == encodingType) {
+                // encoding = text/plain seems to wrongly end up here?
                 System.out.println("c");
                 allParameters.addAll(getRequestBody() == null
                         ? getRequestParameters()
