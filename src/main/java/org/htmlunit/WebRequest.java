@@ -356,7 +356,6 @@ public class WebRequest implements Serializable {
      * @return the request parameters to use
      */
     public List<NameValuePair> getParameters() {
-
         // developer note:
         // this has to be in sync with org.htmlunit.HttpWebConnection.makeHttpMethod(WebRequest, HttpClientBuilder)
 
