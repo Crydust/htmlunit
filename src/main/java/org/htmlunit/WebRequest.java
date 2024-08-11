@@ -372,18 +372,25 @@ public class WebRequest implements Serializable {
         if (HttpMethod.GET != httpMethod && HttpMethod.HEAD != httpMethod && HttpMethod.TRACE != httpMethod) {
             final FormEncodingType encodingType = getEncodingType();
             final String accept = getAdditionalHeader("Accept");
-            if (("application/json".equalsIgnoreCase(accept) || "application/xml".equalsIgnoreCase(accept))
+            if (HttpMethod.OPTIONS == httpMethod) {
+                if (FormEncodingType.MULTIPART == encodingType) {
+                    // these parameters should come after the query parameters but to mimic spring we add them at the start
+                    allParameters.addAll(0, getRequestParameters());
+                }
+                // parameters ignored for OPTIONS method when URL_ENCODED == encodingType
+            }
+            else if (("application/json".equalsIgnoreCase(accept) || "application/xml".equalsIgnoreCase(accept))
                 && FormEncodingType.MULTIPART == encodingType
                 && HttpMethod.POST != httpMethod) {
                 // these parameters should come after the query parameters but to mimic spring we add them at the start
                 allParameters.addAll(0, getRequestParameters());
             }
-            else if (FormEncodingType.URL_ENCODED == encodingType && HttpMethod.OPTIONS != httpMethod) {
+            else if (FormEncodingType.URL_ENCODED == encodingType) {
                 allParameters.addAll(getRequestBody() == null
                         ? getRequestParameters()
                         : HttpUtils.parseUrlQuery(getRequestBody(), getCharset()));
             }
-            else if (FormEncodingType.MULTIPART == encodingType && HttpMethod.OPTIONS != httpMethod) {
+            else if (FormEncodingType.MULTIPART == encodingType) {
                 // the servlet api ignores these parameters but to make spring happy we include them
                 allParameters.addAll(getRequestParameters());
             }
