@@ -356,6 +356,7 @@ public class WebRequest implements Serializable {
      * @return the request parameters to use
      */
     public List<NameValuePair> getParameters() {
+        System.out.println("*** WebRequest.getParameters");
         // developer note:
         // this has to be in sync with org.htmlunit.HttpWebConnection.makeHttpMethod(WebRequest, HttpClientBuilder)
 
@@ -373,6 +374,7 @@ public class WebRequest implements Serializable {
             final String accept = getAdditionalHeader("Accept");
             if (HttpMethod.OPTIONS == httpMethod) {
                 if (FormEncodingType.MULTIPART == encodingType) {
+                    System.out.println("a");
                     // these parameters should come after the query parameters but to mimic spring we add them at the start
                     allParameters.addAll(0, getRequestParameters());
                 }
@@ -381,20 +383,24 @@ public class WebRequest implements Serializable {
             else if (("application/json".equalsIgnoreCase(accept) || "application/xml".equalsIgnoreCase(accept))
                 && FormEncodingType.MULTIPART == encodingType
                 && HttpMethod.POST != httpMethod) {
+                System.out.println("b");
                 // these parameters should come after the query parameters but to mimic spring we add them at the start
                 allParameters.addAll(0, getRequestParameters());
             }
             else if (FormEncodingType.URL_ENCODED == encodingType) {
+                System.out.println("c");
                 allParameters.addAll(getRequestBody() == null
                         ? getRequestParameters()
                         : HttpUtils.parseUrlQuery(getRequestBody(), getCharset()));
             }
             else if (FormEncodingType.MULTIPART == encodingType) {
+                System.out.println("d");
                 // the servlet api ignores these parameters but to make spring happy we include them
                 allParameters.addAll(getRequestParameters());
             }
         }
 
+        System.out.println("*** WebRequest.getParameters done");
         return normalize(allParameters);
 
     }
